@@ -222,8 +222,10 @@ env/
 .env.local
 
 # Data (don't commit user data)
-data/
+data/*
 !data/.gitkeep
+!data/backup/
+!data/backup/.gitkeep
 *.json
 *.db
 *.sqlite
