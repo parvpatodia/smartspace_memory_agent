@@ -16,7 +16,7 @@ from .memory_types import (
     MemoryQuery, 
     MemoryType
 )
-
+from .healthcare_types import get_equipment_info, EquipmentCategory
 
 class MemoryStore:
     """
@@ -458,7 +458,54 @@ class MemoryStore:
             
             print("All memories cleared")
 
+    def check_critical_equipment_alert(self, memory: ObjectMemory) -> Optional[dict]:
+        """
+        Check if this memory should trigger a critical alert.
+        
+        Healthcare-specific logic:
+        - Critical equipment leaving typical location
+        - Equipment in completely unexpected area
+        - Pattern indicates possible theft
+        
+        Args:
+            memory: The new observation
+            
+        Returns:
+            Alert dict if should alert, None otherwise
+            
+        Example:
+            memory = ObjectMemory(object_name="crash_cart", location="Parking Lot")
+            alert = store.check_critical_equipment_alert(memory)
+            if alert:
+                send_notification(alert)
+        """
+        # Get equipment info
+        equipment_info = get_equipment_info(memory.object_name)
+    
+        if not equipment_info:
+            return None  # Unknown equipment type
+        
+        # Check if location is typical
+        location_lower = memory.location_description.lower()
+        is_typical = any(
+            typical.lower() in location_lower 
+            for typical in equipment_info.typical_locations
+        )
+        
+        # Generate alert if needed
+        if equipment_info.alert_on_movement and not is_typical:
+            return {
+                "severity": "critical" if equipment_info.category == EquipmentCategory.CRITICAL else "high",
+                "equipment": memory.object_name,
+                "message": f"{memory.object_name} detected in unusual location: {memory.location_description}",
+                "typical_locations": equipment_info.typical_locations,
+                "current_location": memory.location_description,
+                "timestamp": memory.timestamp.isoformat(),
+                "action_required": "Verify location immediately" if equipment_info.category == EquipmentCategory.CRITICAL else "Check when convenient"
+            }
+        
+        return None
 
-# Create single global instance
+            
 # All parts of the app will use this same instance
 memory_store = MemoryStore()

@@ -1,3 +1,4 @@
+from routers import upload
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
@@ -26,7 +27,8 @@ app.add_middleware(
 )
 
 # Include the memory router
-app.include_router(memory.router)  # ← Add this line!
+app.include_router(memory.router)
+app.include_router(upload.router)  # ← Add this line!
 
 @app.get("/")
 async def root():
@@ -37,7 +39,8 @@ async def root():
         "endpoints": {
             "health": "/health",
             "docs": "/docs",
-            "memory": "/api/memory"  # ← Added
+            "memory": "/api/memory" ,
+            "upload": "/api/upload" # ← Added
         }
     }
 
