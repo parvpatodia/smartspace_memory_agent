@@ -14,7 +14,7 @@ The core insight is simple: visual memory changes the economics of video surveil
 Team
 Parv Patodia
 
-San Francisco, California. Master's student focused on building production-grade AI systems. Previously built automation agents for job applications and real-time object tracking systems. Experienced with PyTorch, FastAPI, and full-stack deployment. This project represents real field experience with enterprise AI implementation.
+San Francisco, California. Master's student focused on building production grade AI systems. Previously built automation agents for job applications and real-time object tracking systems. Experienced with PyTorch, FastAPI, and full-stack deployment. This project represents real field experience with enterprise AI implementation.
 
 Key Features
 Visual Memory Powered Detection
@@ -23,11 +23,11 @@ Imagine a smart system that watches hours of hospital video footage, not just sp
 
 Real-Time Analytics Dashboard
 
-Picture a clean, intuitive dashboard where every critical detail about hospital equipment comes alive. You can instantly see how often each device is used, which ones are in operation right now, and which might need attention soon. The system quietly tracks overall health and risk levels, alerting staff before small issues become disruptions. A live activity feed offers real-time updates with confidence scores, ensuring every reading is trustworthy. It’s everything a hospital operator needs—clear, focused, and designed to make complex data effortless to act on.
+Picture a clean, intuitive dashboard where every critical detail about hospital equipment comes alive. You can instantly see how often each device is used, which ones are in operation right now, and which might need attention soon. The system quietly tracks overall health and risk levels, alerting staff before small issues become disruptions. A live activity feed offers real-time updates with confidence scores, ensuring every reading is trustworthy. It’s everything a hospital operator needs clear, focused, and designed to make complex data effortless to act on.
 
 Comprehensive History and Reporting
 
-It is basically a system that remembers every moment, tracking where and when each piece of equipment appears complete with details like time, location, and how certain the system is. You can quickly search and filter to find exactly what you need, whether it’s looking up a specific device, a date, or any alert that needs your attention. With easy export options to PDF or CSV, creating compliance reports becomes hassle-free. Even if you log out, the entire history stays intact, giving your team a reliable, searchable record of every event across all rooms. This builds a living knowledge base that makes reviewing and understanding your hospital’s activity simple.
+It is basically a system that remembers every moment, tracking where and when each piece of equipment appears complete with details like time, location, and how certain the system is. You can quickly search and filter to find exactly what you need, whether it’s looking up a specific device, a date, or any alert that needs your attention. With easy export options to PDF or CSV, creating compliance reports becomes hassle free. Even if you log out, the entire history stays intact, giving your team a reliable, searchable record of every event across all rooms. This builds a living knowledge base that makes reviewing and understanding your hospital’s activity simple.
 
 Intelligent Alerting System
 
@@ -46,7 +46,7 @@ Database: Supabase for reliable data persistence
 
 AI Foundation: Memories.ai Large Visual Memory Model
 
-The system connects seamlessly with Memories.ai’s API, streaming video uploads straight to the LVMM engine. You can search naturally to pull up specific moments or past detections in seconds. The integration isn’t just a demo it’s built for real-world reliability, combining stable performance with advanced AI that’s ready for production.
+The system connects seamlessly with Memories.ai’s API, streaming video uploads straight to the LVMM engine. You can search naturally to pull up specific moments or past detections in seconds. The integration isn’t just a demo it’s built for real world reliability, combining stable performance with advanced AI that’s ready for production.
 
 How We Use Memories.ai
 1)You upload your video footage.
@@ -78,7 +78,7 @@ The initial assumption was that the LVMM would expose raw detection labels direc
 
 Video Processing at Scale
 
-Large hospital footage files required careful handling. We implemented chunked uploads with async processing. Video files up to 250MB process reliably. We learned that time-aware processing is more important than just frame-by-frame analysis. Equipment patterns matter more than individual frames.
+Large hospital footage files required careful handling. We implemented chunked uploads with async processing. Video files up to 250MB process reliably. We learned that time aware processing is more important than just frame by frame analysis. Equipment patterns matter more than individual frames.
 
 Building for Enterprise Healthcare
 
@@ -91,7 +91,7 @@ We implemented a design system with CSS variables and consistent spacing, typogr
 Future Improvements
 Phase 1: Enhanced Detection
 
-Integrate YOLO for local detection alongside Memories.ai for faster processing of straightforward cases. Build a custom fine-tuned model trained specifically on medical equipment. Support multi-camera feed aggregation. Add real-time streaming capability for live facility monitoring.
+Integrate YOLO for local detection alongside Memories.ai for faster processing of straightforward cases. Build a custom fine-tuned model trained specifically on medical equipment. Support multi-camera feed aggregation. Add real time streaming capability for live facility monitoring.
 
 Phase 2: Advanced Analytics
 
@@ -99,11 +99,11 @@ Predictive maintenance by analyzing equipment usage patterns. Anomaly detection 
 
 Phase 3: Enterprise Features
 
-Multi-facility dashboard for hospital systems managing multiple locations. Role-based access control. Automated compliance reporting. Mobile application for on-the-go equipment lookup. API marketplace for third-party integrations.
+Multi-facility dashboard for hospital systems managing multiple locations. Role-based access control. Automated compliance reporting. Mobile application for on the go equipment lookup. API marketplace for third-party integrations.
 
 Phase 4: Commercialization
 
-Pilot program with 3-5 hospital systems to validate value. ROI calculator showing cost savings. White-label solution for healthcare vendors. Edge deployment option for facilities with privacy requirements. Fundraising for scaling operations.
+Pilot program with 3-5 hospital systems to validate value. ROI calculator showing cost savings. White label solution for healthcare vendors. Edge deployment option for facilities with privacy requirements. Fundraising for scaling operations.
 
 Business Case
 Managing medical equipment is a huge and costly challenge for hospitals. In the U.S. alone, hospitals spend $50 billion every year just on equipment management. When equipment sits unused or can’t be found, each idle unit can cost a hospital $2,000 a month. Staff often waste hours tracking down devices, and compliance teams find audits stressful and time-consuming.
