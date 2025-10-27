@@ -10,6 +10,8 @@ from typing import Optional, List
 # Import our memory system
 from memory.memory_store import memory_store
 from memory.memory_types import ObjectMemory, SystemMemory, MemoryType
+from memory.healthcare_types import get_equipment_info, MEDICAL_EQUIPMENT_TYPES
+
 
 # Create router
 router = APIRouter(
@@ -459,3 +461,51 @@ async def memory_health_check():
             "error": str(e),
             "timestamp": datetime.now().isoformat()
         }
+
+@router.get("/equipment-types")
+async def get_equipment_types():
+    """
+    Get list of medical equipment types the system can track.
+    
+    Returns:
+        List of equipment with their properties
+        
+    Example:
+        GET /api/memory/equipment-types
+        
+        Response:
+        {
+            "equipment_types": [
+                {
+                    "name": "crash_cart",
+                    "category": "critical",
+                    "typical_locations": ["ICU", "Emergency Room"],
+                    "replacement_cost": 25000.00
+                },
+                ...
+            ]
+        }
+    """
+    try:
+        equipment_list = [
+            {
+                "name": eq.name,
+                "category": eq.category,
+                "typical_locations": eq.typical_locations,
+                "alert_on_movement": eq.alert_on_movement,
+                "replacement_cost": eq.replacement_cost
+            }
+            for eq in MEDICAL_EQUIPMENT_TYPES.values()
+        ]
+        
+        return {
+            "equipment_types": equipment_list,
+            "total_types": len(equipment_list)
+        }
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to get equipment types: {str(e)}"
+        )
+
