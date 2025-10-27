@@ -7,7 +7,7 @@ const Header = ({ stats }) => {
         <div className="header-content">
           <div className="logo">
             <span className="logo-icon">🏥</span>
-            <h1>MemoryGuard</h1>
+            <h1>MediTrack</h1>
           </div>
           <div className="header-stats" id="headerStats">
             <div className="stat-item">

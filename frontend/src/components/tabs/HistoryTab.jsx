@@ -1,9 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const HistoryTab = ({ uploadHistory }) => {
+const HistoryTab = ({ uploadHistory, setUploadHistory }) => {
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch history when component mounts
+  useEffect(() => {
+    fetchHistory();
+  }, []);
+
+  const fetchHistory = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('http://localhost:8000/api/history');
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setUploadHistory(result.data);
+        console.log(`✅ Loaded ${result.data.length} history records`);
+      }
+    } catch (error) {
+      console.error('Failed to fetch history:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter logic
   const getFilteredHistory = () => {
@@ -67,10 +90,10 @@ const HistoryTab = ({ uploadHistory }) => {
   const getStatusBadge = (item) => {
     const alerts = item?.alerts || 0;
     if (alerts > 0) {
-      return { status: 'CRITICAL', color: 'critical', icon: '🚨' };
+      return { status: 'CRITICAL', color: 'critical', icon: '⚠' };
     }
     if ((item?.detections || 0) > 2) {
-      return { status: 'WARNING', color: 'warning', icon: '⚠️' };
+      return { status: 'WARNING', color: 'warning', icon: '⚡' };
     }
     return { status: 'NORMAL', color: 'success', icon: '✓' };
   };
@@ -83,11 +106,21 @@ const HistoryTab = ({ uploadHistory }) => {
     ? (uploadHistory.reduce((sum, item) => sum + (item?.size || 0), 0) / totalUploads)
     : 0;
 
+  if (loading) {
+    return (
+      <section className="history-tab">
+        <div className="no-history">
+          <p>Loading history...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="history-tab">
       {/* Header */}
       <div className="history-header">
-        <h2>📋 Upload History</h2>
+        <h2>Upload History</h2>
         <p>Complete timeline of all video uploads and detections</p>
       </div>
 
@@ -108,7 +141,7 @@ const HistoryTab = ({ uploadHistory }) => {
           </div>
         </div>
         <div className="history-stat">
-          <span className="stat-icon">🚨</span>
+          <span className="stat-icon">⚠️</span>
           <div className="stat-content">
             <span className="stat-label">Critical Sessions</span>
             <span className="stat-value critical-value">{criticalCount}</span>
@@ -128,7 +161,7 @@ const HistoryTab = ({ uploadHistory }) => {
         <div className="search-box">
           <input
             type="text"
-            placeholder="🔍 Search by filename or ID..."
+            placeholder="Search by filename or ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -245,7 +278,7 @@ const HistoryTab = ({ uploadHistory }) => {
 
       {/* Detailed Stats Section */}
       <div className="history-insights">
-        <h3>📊 Session Insights</h3>
+        <h3>Session Insights</h3>
 
         <div className="insights-grid">
           <div className="insight-card">
@@ -305,28 +338,12 @@ const HistoryTab = ({ uploadHistory }) => {
                 <p className="percentage">
                   {((criticalCount / totalUploads) * 100).toFixed(1)}% of all uploads
                 </p>
-                <p className="recommendation">⚠️ Review critical sessions</p>
+                <p className="recommendation">Review critical sessions</p>
               </div>
             ) : (
               <p className="no-data">No critical sessions</p>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Bulk Actions */}
-      <div className="history-bulk-actions">
-        <h3>🔧 Bulk Actions</h3>
-        <div className="bulk-buttons">
-          <button className="bulk-btn export">
-            <span>📊</span> Export All History
-          </button>
-          <button className="bulk-btn generate">
-            <span>📄</span> Generate Report
-          </button>
-          <button className="bulk-btn clear">
-            <span>🗑️</span> Clear Old Records
-          </button>
         </div>
       </div>
     </section>

@@ -1,23 +1,18 @@
-from routers import upload
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
 import os
+from dotenv import load_dotenv
+import json
 from datetime import datetime
-
-# Import the memory router
-from routers import memory
-
+from pathlib import Path
 load_dotenv()
+# Import routers
+from routers import upload, history, memory
 
-app = FastAPI(
-    title="SmartSpace Memory Agent",
-    description="AI-powered memory system for object tracking",
-    version="1.0.0"
-)
+app = FastAPI(title="MemoryGuard API", version="1.0.0")
 
-# CORS
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,53 +21,57 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include the memory router
+# Include routers
+app.include_router(upload.router)
+app.include_router(history.router)
 app.include_router(memory.router)
-app.include_router(upload.router)  # ← Add this line!
+
+@app.on_event("startup")
+async def startup_event():
+    """Initialize application on startup."""
+    print("\n" + "="*50)
+    print("SmartSpace Memory Agent starting...")
+    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Debug mode: {os.getenv('DEBUG', 'false')}")
+    print(f"Data directory: {os.path.abspath('./data')}")
+    print("="*50 + "\n")
 
 @app.get("/")
 async def root():
+    """Root endpoint."""
     return {
-        "message": "SmartSpace Memory Agent API is running!",
-        "timestamp": datetime.now().isoformat(),
+        "service": "MemoryGuard API",
         "version": "1.0.0",
+        "status": "running",
         "endpoints": {
-            "health": "/health",
-            "docs": "/docs",
-            "memory": "/api/memory" ,
-            "upload": "/api/upload" # ← Added
+            "upload": "/api/upload",
+            "history": "/api/history",
+            "health": "/api/health"
         }
     }
 
 @app.get("/health")
-async def health_check():
+async def health():
+    """Health check endpoint."""
     return {
         "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "data_dir": os.getenv("DATA_DIR"),
-        "debug": os.getenv("DEBUG") == "true"
+        "service": "MemoryGuard",
+        "timestamp": datetime.now().isoformat()
     }
 
-@app.on_event("startup")
-async def startup_event():
-    print("SmartSpace Memory Agent starting...")
-    print(f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"Debug mode: {os.getenv('DEBUG')}")
-    print(f"Data directory: {os.getenv('DATA_DIR')}")
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    print("SmartSpace Memory Agent shutting down...")
-
-
 if __name__ == "__main__":
-    host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", 8000))
-    debug = os.getenv("DEBUG", "false").lower() == "true"
+    import uvicorn
+    
+    print("\n🚀 Starting MemoryGuard Backend Server...")
+    print("📍 Server: http://localhost:8000")
+    print("📚 API Docs: http://localhost:8000/docs")
+    print("🔌 WebSocket: ws://localhost:8000/ws\n")
     
     uvicorn.run(
         "main:app",
-        host=host,
-        port=port,
-        reload=debug
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        reload_dirs=["routers", "services"]
     )
+    

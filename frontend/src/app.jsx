@@ -1,5 +1,4 @@
 /**
- * COMPLETE REDESIGNED APP.JSX
  * Professional healthcare equipment tracking dashboard
  * With analytics, tabs, upload management, and real features
  */
@@ -18,6 +17,7 @@ import apiClient from './services/api';
 import './styles/main.css';
 import './styles/components.css';
 import './styles/healthcare.css';
+import PropTypes from 'prop-types';
 
 const getInitialStats = () => ({
   total: 0,
@@ -90,31 +90,34 @@ function App() {
 
   const handleUploadComplete = (response) => {
     try {
-      if (!response || !Array.isArray(response.detections)) {
+      // The response structure is response.data.detections, not response.detections
+      const detections = response?.data?.detections || [];
+      
+      if (!Array.isArray(detections)) {
         throw new Error('Invalid response format');
       }
-
+  
       // Add to history
       const uploadRecord = {
         id: Date.now(),
-        fileName: response.detections[0]?.fileName || 'Unknown',
+        fileName: response?.data?.filename || 'Unknown',
         timestamp: new Date().toISOString(),
-        detectionCount: response.detections.length,
-        alerts: response.summary?.alerts_generated || 0,
-        detections: response.detections
+        detectionCount: detections.length,
+        alerts: response?.data?.alerts || 0,
+        detections: detections
       };
       
       setUploadHistory(prev => [uploadRecord, ...prev].slice(0, 50));
-
+  
       // Add to memory
-      appState.addMemories(response.detections);
-
+      appState.addMemories(detections);
+  
       // Show success
       addToast(
-        `✅ Detected ${response.detections.length} object(s). ${response.summary?.alerts_generated || 0} alert(s).`,
+        `✅ Detected ${detections.length} object(s). ${response?.data?.alerts || 0} alert(s).`,
         'success'
       );
-
+  
       // Go to dashboard
       setActiveTab('dashboard');
     } catch (error) {
@@ -122,6 +125,7 @@ function App() {
       addToast('Error processing results', 'error');
     }
   };
+  
 
   const handleClearAll = () => {
     if (window.confirm('Delete all memories? This cannot be undone.')) {
@@ -184,7 +188,7 @@ function App() {
 
           {/* History Tab */}
           {activeTab === 'history' && (
-            <HistoryTab uploadHistory={uploadHistory} />
+            <HistoryTab uploadHistory={uploadHistory} setUploadHistory={setUploadHistory}/>
           )}
 
           {/* Alerts Tab */}
