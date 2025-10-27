@@ -10,7 +10,7 @@ load_dotenv()
 # Import routers
 from routers import upload, history, memory
 
-app = FastAPI(title="MemoryGuard API", version="1.0.0")
+app = FastAPI(title="MediTrack API", version="1.0.0")
 
 # CORS middleware
 app.add_middleware(
@@ -40,7 +40,7 @@ async def startup_event():
 async def root():
     """Root endpoint."""
     return {
-        "service": "MemoryGuard API",
+        "service": "MediTrack API",
         "version": "1.0.0",
         "status": "running",
         "endpoints": {
@@ -55,14 +55,14 @@ async def health():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "service": "MemoryGuard",
+        "service": "MediTrack",
         "timestamp": datetime.now().isoformat()
     }
 
 if __name__ == "__main__":
     import uvicorn
     
-    print("\n🚀 Starting MemoryGuard Backend Server...")
+    print("\n🚀 Starting MediTrack Backend Server...")
     print("📍 Server: http://localhost:8000")
     print("📚 API Docs: http://localhost:8000/docs")
     print("🔌 WebSocket: ws://localhost:8000/ws\n")
