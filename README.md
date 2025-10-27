@@ -1,13 +1,13 @@
-MemoryGuard
+MediTrack
 Healthcare equipment monitoring powered by persistent visual memory.
 
 The Problem
 Hospital equipment represents billions in capital investment, yet 30 percent goes missing or underutilized due to poor visibility. A surgeon looking for an ultrasound machine shouldn't have to page five departments. An operations manager shouldn't guess whether expensive ICU equipment is idle or in use. Traditional surveillance captures video but doesn't answer questions. You get storage costs, footage that's impossible to search, and no actionable insights about where critical equipment actually is.
 
-MemoryGuard changes that. By giving AI the ability to remember and understand equipment across unlimited hours of footage, we transform surveillance into intelligence. It's not about recording what happened. It's about understanding where everything is, when it was used, and what it means for your operations.
+MediTrack changes that. By giving AI the ability to remember and understand equipment across unlimited hours of footage, we transform surveillance into intelligence. It's not about recording what happened. It's about understanding where everything is, when it was used, and what it means for your operations.
 
 What We Built
-MemoryGuard is a full-stack healthcare equipment tracking system built on Memories.ai's Large Visual Memory Model. Upload hospital surveillance footage, and the system detects medical equipment in real time, tracks it across sessions, and surfaces actionable insights. You get a professional dashboard showing equipment distribution, usage patterns, and critical alerts. History is searchable. Analytics are exportable. Nothing is lost because everything is remembered.
+MediTrack is a full-stack healthcare equipment tracking system built on Memories.ai's Large Visual Memory Model. Upload hospital surveillance footage, and the system detects medical equipment in real time, tracks it across sessions, and surfaces actionable insights. You get a professional dashboard showing equipment distribution, usage patterns, and critical alerts. History is searchable. Analytics are exportable. Nothing is lost because everything is remembered.
 
 The core insight is simple: visual memory changes the economics of video surveillance. Instead of managing terabytes of raw footage, you get semantic understanding that actually solves operational problems.
 
@@ -105,11 +105,11 @@ Phase 4: Commercialization
 Pilot program with 3-5 hospital systems to validate value. ROI calculator showing cost savings. White-label solution for healthcare vendors. Edge deployment option for facilities with privacy requirements. Fundraising for scaling operations.
 
 Business Case
-The addressable market is substantial. American hospitals spend 50 billion annually on equipment management. Equipment downtime costs hospitals 2000 dollars per unit per month in lost utilization. Procurement teams waste time searching for equipment. Compliance teams struggle with asset audits. These are real operational costs that MemoryGuard addresses directly.
+The addressable market is substantial. American hospitals spend 50 billion annually on equipment management. Equipment downtime costs hospitals 2000 dollars per unit per month in lost utilization. Procurement teams waste time searching for equipment. Compliance teams struggle with asset audits. These are real operational costs that MediTrack addresses directly.
 
 A typical 500-bed hospital might manage 5000 high-value equipment items. Current loss rates average 3 to 5 percent annually due to misplacement, accounting for 2.5 to 4 million in write-offs. Equipment procurement is often duplicated because nobody knows if equipment exists elsewhere in the facility. These inefficiencies compound.
 
-MemoryGuard reduces procurement costs by 70 percent through better visibility. Equipment utilization increases by 25 percent when operators know where to find what they need. Audit time drops from weeks to hours. For a 500-bed system, this represents 500 thousand to 2 million in annual savings. The business case is real.
+MediTrack reduces procurement costs by 70 percent through better visibility. Equipment utilization increases by 25 percent when operators know where to find what they need. Audit time drops from weeks to hours. For a 500-bed system, this represents 500 thousand to 2 million in annual savings. The business case is real.
 
 Deployment
 Extract the repository. Follow setup instructions in SETUP.md. Configure your Memories.ai API key. Start both backend and frontend services. The application is ready for production use or demo deployment.
