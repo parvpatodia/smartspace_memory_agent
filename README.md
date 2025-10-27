@@ -62,7 +62,7 @@ Clone the repository and navigate to the backend directory. Create a Python virt
 
 Frontend Setup
 
-Navigate to the frontend directory and run npm install to get dependencies. Start the development server with npm start. The application will load at localhost:3000.
+Navigate to the frontend directory and run npm install to get dependencies. Start the development server with npm start. The application will load at localhost:3000/3001.
 
 Testing the System
 
