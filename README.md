@@ -18,7 +18,12 @@ The core insight is simple: visual memory changes the economics of video surveil
 
 Parv Patodia
 
-San Francisco, California. Master's student focused on building production grade AI systems. Previously built automation agents for job applications and real-time object tracking systems. Experienced with PyTorch, FastAPI, and full-stack deployment. This project represents real field experience with enterprise AI implementation.
+San Jose, California. Master's student focused on building production-grade AI systems. Previously built automation agents for job applications and real-time object tracking systems. Experienced with PyTorch, FastAPI, and full-stack deployment. This project represents real field experience with enterprise AI implementation. I love to break ankles in basketball and badminton!
+
+Dishaa Bornare 
+
+San Jose, California. Master's student in Data Science. I come from an applied statistics and analytics background with a strong foundation in ML and AI. Apart from research and studies, I enjoy swimming and hiking!
+
 
 **Key Features**
 
