@@ -6,6 +6,8 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import TabNavigation from './components/TabNavigation';
+import TrackingViewer from './components/TrackingViewer';
+import TopologyViewer from './components/TopologyViewer';
 import UploadTab from './components/tabs/UploadTab';
 import DashboardTab from './components/tabs/DashboardTab';
 import AnalyticsTab from './components/tabs/AnalyticsTab';
@@ -189,6 +191,16 @@ function App() {
           {/* History Tab */}
           {activeTab === 'history' && (
             <HistoryTab uploadHistory={uploadHistory} setUploadHistory={setUploadHistory}/>
+          )}
+
+          {/* Tracking Tab */}
+          {activeTab === 'tracking' && (
+            <TrackingViewer />
+          )}
+
+          {/* Topology Tab */}
+          {activeTab === 'topology' && (
+            <TopologyViewer />
           )}
 
           {/* Alerts Tab */}

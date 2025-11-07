@@ -3,19 +3,33 @@ import ProcessingStatus from '../ProcessingStatus';
 import apiClient from '../../services/api';
 import { SuccessNotification, ErrorNotification, LoadingSpinner, UploadProgress } from '../Notifications';
 
+
+const TOPOLOGY_NODES = [
+  { id: 1, name: 'Room 2' },
+  { id: 2, name: 'Hallway A' },
+  { id: 3, name: 'Room 5' },
+  { id: 4, name: 'OR 1' },
+  { id: 5, name: 'Staging Area' }
+];
+
+
 const UploadTab = ({ onUploadComplete, onToast }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [currentFile, setCurrentFile] = useState(null);
   const [notification, setNotification] = useState(null);
   const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+  const [selectedNode, setSelectedNode] = useState(1);
   const fileInputRef = useRef(null);
+
 
   const handleUpload = async (file) => {
     if (!file) return;
 
+
     const validTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-matroska'];
     const maxSize = 500 * 1024 * 1024;
+
 
     // Validate file type
     if (!validTypes.includes(file.type)) {
@@ -25,6 +39,7 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
       });
       return;
     }
+
 
     // Validate file size
     if (file.size > maxSize) {
@@ -36,42 +51,49 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
       return;
     }
 
+
     setCurrentFile(file);
     setIsProcessing(true);
     setShowLoadingSpinner(true);
-    setNotification(null); // Clear any previous notifications
+    setNotification(null);
+
 
     try {
       const response = await apiClient.uploadVideo(file, (progress) => {
         setUploadProgress(Math.min(90, Math.round(progress / 2 + 10)));
       });
 
+
       setUploadProgress(100);
       setShowLoadingSpinner(false);
 
-      // Show success notification
+
+      // Add node info to response
+      const nodeInfo = TOPOLOGY_NODES.find(n => n.id === selectedNode);
+      response.selectedNode = selectedNode;
+      response.selectedNodeName = nodeInfo?.name || `Node ${selectedNode}`;
+      
       const detectionCount = response?.data?.detections?.length || 0;
-      console.log('✅ Setting success notification:', detectionCount);
+      console.log('Detected:', detectionCount, 'items in', nodeInfo?.name);
       
       setNotification({
         type: 'success',
-        message: `Successfully detected ${detectionCount} equipment items`
+        message: `Successfully detected ${detectionCount} items in ${nodeInfo?.name}`
       });
 
-      // IMPORTANT: Call callback AFTER notification is set
-      // This prevents any errors from interfering with notification display
+
       onUploadComplete(response);
 
-      // Reset state after a delay to let user see the notification
+
       setTimeout(() => {
-        console.log('🔄 Resetting state after notification');
+        console.log('Resetting state after upload');
         setIsProcessing(false);
         setCurrentFile(null);
         setUploadProgress(0);
       }, 1500);
 
+
     } catch (error) {
-      // Only show error notification if upload itself fails
       setShowLoadingSpinner(false);
       setIsProcessing(false);
       
@@ -79,23 +101,25 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
                           error?.message || 
                           'Upload failed. Please try again.';
       
-      console.error('❌ Upload error:', errorMessage);
+      console.error('Upload error:', errorMessage);
       
       setNotification({
         type: 'error',
         message: errorMessage
       });
 
-      // Reset file input
+
       setCurrentFile(null);
       setUploadProgress(0);
     }
   };
 
+
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
+
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -106,20 +130,20 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
     }
   };
 
+
   return (
     <section className="upload-tab">
-      {/* Loading Spinner */}
       {showLoadingSpinner && (
         <LoadingSpinner message="Processing video and detecting equipment..." />
       )}
 
-      {/* Success/Error Notifications - ONLY show ONE */}
+
       {notification && (
         notification.type === 'success' ? (
           <SuccessNotification
             message={notification.message}
             onClose={() => {
-              console.log('✓ Closing success notification');
+              console.log('Closing notification');
               setNotification(null);
             }}
           />
@@ -127,22 +151,21 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
           <ErrorNotification
             message={notification.message}
             onClose={() => {
-              console.log('✕ Closing error notification');
+              console.log('Closing error');
               setNotification(null);
             }}
           />
         )
       )}
 
-      {/* Header */}
+
       <div className="section-header">
         <h2>Upload Hospital Security Footage</h2>
         <p>Upload video to detect and track medical equipment in real-time</p>
       </div>
 
-      {/* Main Content */}
+
       {isProcessing && currentFile ? (
-        // Processing State - Show Upload Progress
         <div className="processing-state">
           <UploadProgress 
             progress={uploadProgress}
@@ -156,67 +179,93 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
           />
         </div>
       ) : (
-        // Upload Area - Ready for upload
-        <div 
-          className="upload-area"
-          onClick={() => !isProcessing && fileInputRef.current?.click()}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          role="button"
-          tabIndex={0}
-          aria-label="Upload video file"
-        >
-          <div className="upload-content">
-            <div className="upload-icon">
-              <svg
-                width="64"
-                height="64"
-                viewBox="0 0 64 64"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M32 8L16 24M32 8L48 24M32 8V40M8 40H56M56 56H8V48M12 56L52 56"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            <h3 className="upload-title">Drag & Drop Your Video Here</h3>
-            <p className="upload-subtitle">or click to browse your files</p>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="video/*"
-              hidden
-              onChange={(e) => handleUpload(e.target.files?.[0])}
-              aria-label="File input"
-            />
-
-            <div className="upload-requirements">
-              <span className="requirement-badge">MP4</span>
-              <span className="requirement-badge">MOV</span>
-              <span className="requirement-badge">AVI</span>
-              <span className="requirement-badge">MKV</span>
-              <span className="requirement-text">Max 500MB</span>
-            </div>
-
-            <button
-              className="upload-button"
-              onClick={() => fileInputRef.current?.click()}
+        <>
+          {/* Node Selector */}
+          <div className="node-selector-container">
+            <label htmlFor="node-select" className="node-label">
+              Select Recording Location:
+            </label>
+            <select
+              id="node-select"
+              value={selectedNode}
+              onChange={(e) => setSelectedNode(Number(e.target.value))}
+              className="node-select"
               disabled={isProcessing}
             >
-              Browse Files
-            </button>
+              {TOPOLOGY_NODES.map(node => (
+                <option key={node.id} value={node.id}>
+                  {node.name}
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
+
+
+          <div 
+            className="upload-area"
+            onClick={() => !isProcessing && fileInputRef.current?.click()}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            role="button"
+            tabIndex={0}
+            aria-label="Upload video file"
+          >
+            <div className="upload-content">
+              <div className="upload-icon">
+                <svg
+                  width="64"
+                  height="64"
+                  viewBox="0 0 64 64"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M32 8L16 24M32 8L48 24M32 8V40M8 40H56M56 56H8V48M12 56L52 56"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+
+              <h3 className="upload-title">Drag & Drop Your Video Here</h3>
+              <p className="upload-subtitle">or click to browse your files</p>
+
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/*"
+                hidden
+                onChange={(e) => handleUpload(e.target.files?.[0])}
+                aria-label="File input"
+              />
+
+
+              <div className="upload-requirements">
+                <span className="requirement-badge">MP4</span>
+                <span className="requirement-badge">MOV</span>
+                <span className="requirement-badge">AVI</span>
+                <span className="requirement-badge">MKV</span>
+                <span className="requirement-text">Max 500MB</span>
+              </div>
+
+
+              <button
+                className="upload-button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isProcessing}
+              >
+                Browse Files
+              </button>
+            </div>
+          </div>
+        </>
       )}
 
-      {/* Info Box */}
+
       <div className="upload-info-box">
         <div className="info-item">
           <span className="info-icon">⚡</span>
@@ -243,5 +292,6 @@ const UploadTab = ({ onUploadComplete, onToast }) => {
     </section>
   );
 };
+
 
 export default UploadTab;

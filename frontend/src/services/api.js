@@ -88,6 +88,57 @@ class APIClient {
             return false;
         }
     }
+
+    // Add these methods to the APIClient class in api.js
+
+    async associateDetections(detections, surge = false) {
+        return this.fetch('/track/associate', {
+            method: 'POST',
+            body: {
+                detections: detections,
+                surge: surge
+            }
+        });
+    }
+
+    async getTracks() {
+        return this.fetch('/track/tracks');
+    }
+
+    async getTrack(trackId) {
+        return this.fetch(`/track/tracks/${trackId}`);
+    }
+
+    async getTopology() {
+        return this.fetch('/track/topology');
+    }
+
+    async reconcileTrack(trackId, action) {
+        return this.fetch(`/track/reconcile/${trackId}?action=${action}`, {
+            method: 'POST'
+        });
+    }
+
+    async getTrackingAnalytics() {
+        return this.fetch('/track/analytics');
+    }
+
+    async acknowledgeAlert(alertId) {
+        return this.fetch(`/alerts/${alertId}/acknowledge`, {
+            method: 'POST',
+            body: {}
+        });
+    }
+    
+    async dismissAlert(alertId) {
+        return this.fetch(`/alerts/${alertId}/dismiss`, {
+            method: 'POST',
+            body: {}
+        });
+    }
+
+
 }
+
 
 export default new APIClient();

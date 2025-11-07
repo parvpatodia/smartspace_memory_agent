@@ -1,0 +1,42 @@
+nodes:
+  - id: 1
+    name: "Room 2"
+    type: "room"
+  - id: 2
+    name: "Hallway A"
+    type: "hall"
+  - id: 3
+    name: "Room 5"
+    type: "room"
+  - id: 4
+    name: "OR 1"
+    type: "room"
+  - id: 5
+    name: "Staging Area"
+    type: "staging"
+
+edges:
+  - from: 1
+    to: 2
+    distance_m: 10
+  - from: 2
+    to: 3
+    distance_m: 28
+  - from: 2
+    to: 4
+    distance_m: 15
+  - from: 4
+    to: 5
+    distance_m: 20
+
+speed_config:
+  normal_mps: 1.3
+  urgent_mps: 2.2
+  time_pad_s: 8
+
+association:
+  dist_weight: 0.4
+  time_weight: 0.4
+  emb_weight: 0.2
+  coasting_duration_s: 15
+  dormant_duration_s: 300

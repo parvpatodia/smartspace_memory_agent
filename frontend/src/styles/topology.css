@@ -1,0 +1,111 @@
+.topology-viewer {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+}
+
+.topology-container {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: auto;
+    margin: 20px 0;
+    max-height: 600px;
+}
+
+.topology-svg {
+    width: 100%;
+    min-height: 600px;
+    background: white;
+}
+
+.node-circle {
+    fill: #0066cc;
+    stroke: #003d99;
+    stroke-width: 2;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.node-circle:hover {
+    fill: #0052a3;
+    stroke-width: 3;
+    r: 45;
+}
+
+.node-label {
+    text-anchor: middle;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.node-id {
+    font-weight: bold;
+    fill: white;
+}
+
+.node-name {
+    fill: white;
+    font-size: 11px;
+}
+
+.edge-label {
+    font-size: 10px;
+    fill: #666;
+    text-anchor: middle;
+}
+
+.topology-legend {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 6px;
+}
+
+.topology-legend h3 {
+    margin-top: 0;
+    font-size: 14px;
+}
+
+.legend-items {
+    display: flex;
+    gap: 30px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.topology-details {
+    margin-top: 20px;
+}
+
+.topology-details h3 {
+    margin-bottom: 10px;
+}
+
+.nodes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.nodes-table th,
+.nodes-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.nodes-table th {
+    background: #f0f0f0;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.nodes-table tbody tr:hover {
+    background: #f5f5f5;
+}

@@ -9,7 +9,19 @@ class AppState {
                 activeAlerts: 0,
                 equipmentTypes: new Set()
             },
-            isProcessing: false
+            isProcessing: false,
+        // Tracking state
+        tracks: [],
+        trackingAnalytics: {
+        totalTracks: 0,
+        avgConfidence: 0,
+        highConfidenceCount: 0,
+        needsReviewCount: 0
+        },
+        topology: {
+            nodes: [],
+            edges: []
+        }
         };
         this.loadFromStorage();
     }
@@ -100,6 +112,76 @@ class AppState {
     getState() {
         return this.state;
     }
+
+
+    addTracks(trackArray) {
+        this.state.tracks = trackArray || [];
+        this.updateTrackingStats();
+        this.saveToStorage();
+        this.notify();
+    }
+    
+    updateTrackingStats() {
+        if (!this.state.tracks.length) {
+            this.state.trackingAnalytics = {
+                totalTracks: 0,
+                avgConfidence: 0,
+                highConfidenceCount: 0,
+                needsReviewCount: 0
+            };
+            return;
+        }
+    
+        const confidences = this.state.tracks.map(t => t.confidence);
+        this.state.trackingAnalytics = {
+            totalTracks: this.state.tracks.length,
+            avgConfidence: (confidences.reduce((a, b) => a + b, 0) / confidences.length).toFixed(3),
+            highConfidenceCount: confidences.filter(c => c > 0.85).length,
+            needsReviewCount: this.state.tracks.filter(t => t.status === 'needs_review').length
+        };
+    }
+    
+    setTopology(topology) {
+        this.state.topology = topology || { nodes: [], edges: [] };
+        this.notify();
+    }
+    
+    getTracks() {
+        return this.state.tracks;
+    }
+    
+    getTrackingStats() {
+        return this.state.trackingAnalytics;
+    }
+    
+    // Update saveToStorage to include tracks
+    saveToStorage() {
+        try {
+            localStorage.setItem('memoryguard_state', JSON.stringify({
+                memories: this.state.memories,
+                tracks: this.state.tracks,
+                timestamp: new Date().toISOString()
+            }));
+        } catch (e) {
+            console.error('Failed to save state:', e);
+        }
+    }
+    
+    // Update loadFromStorage to include tracks
+    loadFromStorage() {
+        try {
+            const data = localStorage.getItem('memoryguard_state');
+            if (data) {
+                const parsed = JSON.parse(data);
+                this.state.memories = parsed.memories || [];
+                this.state.tracks = parsed.tracks || [];
+                this.updateStats();
+                this.updateTrackingStats();
+            }
+        } catch (e) {
+            console.error('Failed to load state:', e);
+        }
+    }    
 }
 
 export default new AppState();

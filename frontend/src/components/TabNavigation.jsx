@@ -6,6 +6,8 @@ const TabNavigation = ({ activeTab, onTabChange, stats }) => {
       { id: 'upload', label: 'Upload Video', icon: '📹', badge: null },
       { id: 'analytics', label: 'Analytics', icon: '📈' },
       { id: 'history', label: 'History', icon: '📋' },
+      { id: 'tracking', label: 'Tracking', icon: '🔍' },
+      { id: 'topology', label: 'Topology', icon: '🌐' },
       { id: 'alerts', label: 'Alerts', icon: '🚨', badge: stats.alerts > 0 ? stats.alerts : null }
     ];
   
