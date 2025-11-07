@@ -247,3 +247,4 @@ Thumbs.db
 .pytest_cache/
 htmlcov/
 .coverage
+.mp4
